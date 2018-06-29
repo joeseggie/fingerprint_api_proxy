@@ -2,6 +2,7 @@
 from app import app
 import requests
 from requests.auth import HTTPBasicAuth
+from bs4 import BeautifulSoup
 
 class SoapClientBuilder():
     """Class the builds the soap client"""
@@ -45,3 +46,23 @@ class SoapClientBuilder():
         api_response = requests.post(url, data=request_body, headers=headers, auth=auth)
 
         return api_response.content.decode('utf-8')
+    
+    def parse_response(self, soap_response):
+        """Parse the SOAP xml response
+        
+        Argument(s):
+            soap_response {str} -- Response returned from the soap request
+        
+        Returns:
+            Dictionary of the response values
+        """
+        soup = BeautifulSoup(soap_response, 'lxml-xml')
+        return {
+            'ReferenceId': soup.referenceid.string,
+            'Msisdn': soup.msisdn.string,
+            'Threshold': soup.threshold.string,
+            'Score': soup.score.string,
+            'MatchingResult': soup.matchingResult.string,
+            'KycUpdateStatus': soup.kycUpdateStatus.string,
+            'Message': soup.message.string
+        }

@@ -27,3 +27,15 @@ class TestSoapClientBuilder:
         # Then
         print(api_response)
         assert isinstance(api_response, str)
+    
+    def test_parse_response(self):
+        # Given
+        builder = SoapClientBuilder()
+        soap_response = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:verifierResponse xmlns:ns2="http://endpoint.tlc.com/"><return><referenceid>120180629000025</referenceid><msisdn>414000114</msisdn><threshold>40.0</threshold><score>99.13779959465239</score><matchingResult>Matched</matchingResult><kycUpdateStatus>-1006|KYC IS ALREADY APPROVED. NO ACTION TAKEN.</kycUpdateStatus><message>The matching score is 99.13779959465239. The score is greater than threshold</message></return></ns2:verifierResponse></soap:Body></soap:Envelope>'
+
+        # When
+        parsed_soap_response = builder.parse_response(soap_response)
+
+        # Then
+        print(parsed_soap_response)
+        assert isinstance(parsed_soap_response, str)
