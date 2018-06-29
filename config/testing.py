@@ -4,3 +4,4 @@ class TestingConfig(Config):
     """Testing configuration"""
     TESTING = True
     DEBUG = True
+    ENV = 'testing'
