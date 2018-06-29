@@ -26,4 +26,22 @@ class SoapClientBuilder():
         soap_body = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:end="http://endpoint.tlc.com/"><soapenv:Header/><soapenv:Body><end:verifier><!--Optional:--><parameter><msisdn>{0}</msisdn><probeMinutiae>{1}</probeMinutiae><candidateTemplate>{2}</candidateTemplate></parameter></end:verifier></soapenv:Body></soapenv:Envelope>'.format(msisdn, probe_minutiae, candidate_template)
 
         return soap_body
+    
+    def send_request(self, request_body):
+        """Sends request to process the soap request
+        
+        Argument(s):
+            request_body {str} -- text/xml formatted string
 
+        Returns:
+            Response from SOAP API as string
+        """
+        url = self.fingerprint_api_wsdl
+        headers = {'Context-Type': 'text/xml'}
+        username = self.api_username
+        password = self.api_password
+        auth = HTTPBasicAuth(username=username, password=password)
+
+        api_response = requests.post(url, data=request_body, headers=headers, auth=auth)
+
+        return api_response.content.decode('utf-8')
